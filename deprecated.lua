@@ -1,6 +1,12 @@
-local func = working_villages.func
+local func = smart_villages.func
+smart_villages.hasbasic_materials = false
+for key, value in ipairs(minetest.get_modnames()) do
+	if(value=="basic_materials") then
+		smart_villages.hasbasic_materials = true
+	end
+end
 
-function working_villages.func.villager_state_machine_job(job_name,job_description,actions, sprop)
+function smart_villages.func.villager_state_machine_job(job_name,job_description,actions, sprop)
 	minetest.log("warning","old util jobdef should be replaced by jobfunc registration")
 	minetest.log("warning","old util jobdef: "..job_name)
 
@@ -36,7 +42,7 @@ function working_villages.func.villager_state_machine_job(job_name,job_descripti
 					self_cond=true
 				end
 				if search_state.search_condition ~= nil and self_cond then
-					local target = working_villages.func.search_surrounding(
+					local target = smart_villages.func.search_surrounding(
 						self.object:getpos(), search_state.search_condition, sprop.searching_range)
 					if target ~= nil then
 						local destination = func.find_adjacent_clear(target)
@@ -44,12 +50,12 @@ function working_villages.func.villager_state_machine_job(job_name,job_descripti
 							print("failure: no adjacent walkable found")
 							destination = target
 						end
-						local val_pos = working_villages.func.validate_pos(self.object:getpos())
-						if working_villages.debug_logging then
+						local val_pos = smart_villages.func.validate_pos(self.object:getpos())
+						if smart_villages.debug_logging then
 							minetest.log("info","looking for a path from " .. minetest.pos_to_string(val_pos) ..
 								" to " .. minetest.pos_to_string(destination))
 						end
-						if working_villages.pathfinder.get_reachable(val_pos,destination,self) then
+						if smart_villages.pathfinder.get_reachable(val_pos,destination,self) then
 							--print("path found to: " .. minetest.pos_to_string(destination))
 							if search_state.to_state then
 								search_state.to_state(self, destination, target)
@@ -66,13 +72,13 @@ function working_villages.func.villager_state_machine_job(job_name,job_descripti
 								and distance.y<=sprop.searching_range.y
 								and distance.z<=sprop.searching_range.z then
 
-							local destination = working_villages.func.validate_pos(target)
-							local val_pos = working_villages.func.validate_pos(self.object:getpos())
-							if working_villages.debug_logging then
+							local destination = smart_villages.func.validate_pos(target)
+							local val_pos = smart_villages.func.validate_pos(self.object:getpos())
+							if smart_villages.debug_logging then
 								minetest.log("info","looking for a path from " .. minetest.pos_to_string(val_pos) ..
 									" to " .. minetest.pos_to_string(destination))
 							end
-							if working_villages.pathfinder.get_reachable(val_pos,destination,self) then
+							if smart_villages.pathfinder.get_reachable(val_pos,destination,self) then
 								--print("path found to: " .. minetest.pos_to_string(destination))
 								if search_state.to_state then
 									search_state.to_state(self, destination, target)
@@ -106,7 +112,7 @@ function working_villages.func.villager_state_machine_job(job_name,job_descripti
 	local function to_walk_randomly(self)
 		self:set_timer(1,20)
 		self:set_timer(2,0)
-		self:set_animation(working_villages.animation_frames.WALK)
+		self:set_animation(smart_villages.animation_frames.WALK)
 	end
 
 	local function s_search_idle(self)
@@ -123,15 +129,15 @@ function working_villages.func.villager_state_machine_job(job_name,job_descripti
 					self_cond=true
 				end
 				if search_state.search_condition ~= nil and self_cond then
-					local target = working_villages.func.search_surrounding(self.object:getpos(),
+					local target = smart_villages.func.search_surrounding(self.object:getpos(),
 						search_state.search_condition, sprop.searching_range)
 					if target ~= nil then
 						local destination = func.find_adjacent_clear(target)
 						if not(destination) then
 							destination = target
 						end
-						local val_pos = working_villages.func.validate_pos(self.object:getpos())
-						if working_villages.pathfinder.get_reachable(val_pos,destination,self) then
+						local val_pos = smart_villages.func.validate_pos(self.object:getpos())
+						if smart_villages.pathfinder.get_reachable(val_pos,destination,self) then
 							if search_state.to_state then
 								search_state.to_state(self, destination, target)
 							end
@@ -157,7 +163,7 @@ function working_villages.func.villager_state_machine_job(job_name,job_descripti
 		self:set_timer(1,0)
 		self:set_timer(2,0)
 		self.object:setvelocity{x = 0, y = 0, z = 0}
-		self:set_animation(working_villages.animation_frames.STAND)
+		self:set_animation(smart_villages.animation_frames.STAND)
 	end
 
 	--sleeping states
@@ -166,7 +172,7 @@ function working_villages.func.villager_state_machine_job(job_name,job_descripti
 			local pos=self.object:getpos()
 			self.object:setpos({x=pos.x,y=pos.y+0.5,z=pos.z})
 			minetest.log("action","a villager gets up")
-			self:set_animation(working_villages.animation_frames.STAND)
+			self:set_animation(smart_villages.animation_frames.STAND)
 			self.pause="active"
 			self:update_infotext()
 			return true
@@ -177,22 +183,22 @@ function working_villages.func.villager_state_machine_job(job_name,job_descripti
 		minetest.log("action","a villager is laying down")
 		self.object:setvelocity{x = 0, y = 0, z = 0}
 		local bed_pos=self:get_home():get_bed()
-		local bed_top = working_villages.func.find_adjacent_pos(bed_pos,
+		local bed_top = smart_villages.func.find_adjacent_pos(bed_pos,
 			function(p) return string.find(minetest.get_node(p).name,"_top") end)
-		local bed_bottom = working_villages.func.find_adjacent_pos(bed_pos,
+		local bed_bottom = smart_villages.func.find_adjacent_pos(bed_pos,
 			function(p) return string.find(minetest.get_node(p).name,"_bottom") end)
 		if bed_top and bed_bottom then
 			self:set_yaw_by_direction(vector.subtract(bed_bottom, bed_top))
 		else
 			minetest.log("info","no bed found")
 		end
-		self:set_animation(working_villages.animation_frames.LAY)
+		self:set_animation(smart_villages.animation_frames.LAY)
 		self.object:setpos(vector.add(bed_pos,{x=0,y=1.5,z=0}))
 		self.pause="sleeping"
 		self:update_infotext()
 	end
 	local function to_walk_home(self)
-		if working_villages.debug_logging then
+		if smart_villages.debug_logging then
 			minetest.log("action","a villager is going home")
 		end
 		self.destination=self:get_home():get_bed()
@@ -200,7 +206,7 @@ function working_villages.func.villager_state_machine_job(job_name,job_descripti
 			minetest.log("warning","villager couldn't find his bed")
 			return
 		end
-		if working_villages.debug_logging then
+		if smart_villages.debug_logging then
 			minetest.log("info","his bed is at:" .. self.destination.x .. ",".. self.destination.y .. ",".. self.destination.z)
 		end
 		self:set_state("goto_dest")
@@ -221,7 +227,7 @@ function working_villages.func.villager_state_machine_job(job_name,job_descripti
 		newStates.GO_OUT	= {number=1,
 					func=function() return true end,
 					to_state=function(self)
-						if working_villages.debug_logging then
+						if smart_villages.debug_logging then
 							minetest.log("action","a villager stood up and is going outside")
 						end
 						self.destination=self:get_home():get_door()
@@ -271,7 +277,7 @@ function working_villages.func.villager_state_machine_job(job_name,job_descripti
 		self.job_state = nil
 		self.time_counters = nil
 		self.path = nil
-		self:set_animation(working_villages.animation_frames.STAND)
+		self:set_animation(smart_villages.animation_frames.STAND)
 	end
 	local function on_resume(self)
 		local job = self:get_job()
@@ -283,7 +289,7 @@ function working_villages.func.villager_state_machine_job(job_name,job_descripti
 	local function on_pause(self)
 		self.object:setvelocity{x = 0, y = 0, z = 0}
 		self.job_state = nil
-		self:set_animation(working_villages.animation_frames.STAND)
+		self:set_animation(smart_villages.animation_frames.STAND)
 	end
 	local function on_step(self)
 		if self.job_state.next_state ~= nil then
@@ -295,12 +301,12 @@ function working_villages.func.villager_state_machine_job(job_name,job_descripti
 			end
 		else
 			if self.job_state.func==nil or self.job_state.func(self) then
-				working_villages.func.get_back_to_searching(self)
+				smart_villages.func.get_back_to_searching(self)
 			end
 		end
 	end
-	working_villages.register_job("working_villages:"..job_name, {
-		description      = "working_villages job : "..job_description,
+	smart_villages.register_job("smart_villages:"..job_name, {
+		description      = "smart_villages job : "..job_description,
 		inventory_image  = "default_paper.png^memorandum_letters.png",
 		on_start         = on_start,
 		on_stop          = on_stop,
@@ -311,7 +317,7 @@ function working_villages.func.villager_state_machine_job(job_name,job_descripti
 	})
 end
 
-function working_villages.func.get_back_to_searching(self)
+function smart_villages.func.get_back_to_searching(self)
 	local myJob = self:get_job()
 	if myJob and myJob.states and myJob.states.SEARCH then
 		self.job_state = myJob.states.SEARCH

@@ -1,11 +1,11 @@
--- working_villages.homes represents a table that contains the villagers homes.
+-- smart_villages.homes represents a table that contains the villagers homes.
 -- This table's keys are inventory names, and values are home objects.
-working_villages.homes = (function()
-	local file_name = minetest.get_worldpath() .. "/working_villages_homes"
+smart_villages.homes = (function()
+	local file_name = minetest.get_worldpath() .. "/smart_villages_homes"
 
 	minetest.register_on_shutdown(function()
 		local save_data = {}
-		for k,v in pairs(working_villages.homes) do
+		for k,v in pairs(smart_villages.homes) do
 			save_data[k]={marker=v.marker}
 		end
 		local file = io.open(file_name, "w")
@@ -32,8 +32,8 @@ local function out_of_limit(pos)
 	return true
 end
 
-minetest.register_node("working_villages:home_marker", {
-	description = "home marker for working_villages",
+minetest.register_node("smart_villages:home_marker", {
+	description = "home marker for smart_villages",
 	drawtype = "nodebox",
 	tiles = {"default_sign_wall_wood.png"},
 	inventory_image = "default_sign_wood.png",
@@ -127,21 +127,21 @@ minetest.register_node("working_villages:home_marker", {
 })
 
 -- home is a prototype home object
-working_villages.home = {version = 1}
+smart_villages.home = {version = 1}
 
 -- get the home of a villager
-function working_villages.get_home(self)
-	return working_villages.homes[self.inventory_name]
+function smart_villages.get_home(self)
+	return smart_villages.homes[self.inventory_name]
 end
 
 -- check whether a villager has a home
-function working_villages.is_valid_home(self)
-	local home = working_villages.get_home(self)
+function smart_villages.is_valid_home(self)
+	local home = smart_villages.get_home(self)
 	if home == nil then
 		return false
 	end
 	if not home.version~=1 then --update home
-		for k, v in pairs(working_villages.home) do
+		for k, v in pairs(smart_villages.home) do
 			home[k] = v
 		end
 	end
@@ -149,17 +149,17 @@ function working_villages.is_valid_home(self)
 end
 
 -- get the position of the home_marker
-function working_villages.home:get_marker()
+function smart_villages.home:get_marker()
 	return self.marker
 end
 
-function working_villages.home:get_marker_meta()
+function smart_villages.home:get_marker_meta()
 	local home_marker_pos = self:get_marker()
 	if minetest.get_node(home_marker_pos).name == "ignore" then
 		minetest.get_voxel_manip():read_from_map(home_marker_pos, home_marker_pos)
 	end
-	if minetest.get_node(home_marker_pos).name ~= "working_villages:home_marker" then
-		if working_villages.debug_logging and not(vector.equals(home_marker_pos,{x=0,y=0,z=0})) then
+	if minetest.get_node(home_marker_pos).name ~= "smart_villages:home_marker" then
+		if smart_villages.debug_logging and not(vector.equals(home_marker_pos,{x=0,y=0,z=0})) then
 			minetest.log("warning", "The door position of an invalid home was requested.")
 			minetest.log("warning", "Given home position:" .. minetest.pos_to_string(home_marker_pos))
 		end
@@ -169,14 +169,14 @@ function working_villages.home:get_marker_meta()
 end
 
 -- get the position that marks "outside"
-function working_villages.home:get_door()
+function smart_villages.home:get_door()
 	if self.door~=nil then
 		return self.door
 	end
 	local meta = self:get_marker_meta()
 	local door_pos = meta:get_string("door")
 	if not door_pos then
-		if working_villages.debug_logging then
+		if smart_villages.debug_logging then
 			local home_marker_pos = self:get_marker()
 			minetest.log("warning", "The position outside the house was not entered for the home at:" ..
 				minetest.pos_to_string(home_marker_pos))
@@ -188,7 +188,7 @@ function working_villages.home:get_door()
 end
 
 -- get the bed of a villager
-function working_villages.home:get_bed()
+function smart_villages.home:get_bed()
 	if self.bed~=nil then
 		return self.bed
 	end
@@ -196,7 +196,7 @@ function working_villages.home:get_bed()
 	local meta = self:get_marker_meta()
 	local bed_pos = meta:get_string("bed")
 	if not bed_pos then
-		if working_villages.debug_logging then
+		if smart_villages.debug_logging then
 			local home_marker_pos = self:get_marker()
 			minetest.log("warning", "The position of the bed was not entered for the home at:" ..
 				minetest.pos_to_string(home_marker_pos))
@@ -208,7 +208,7 @@ function working_villages.home:get_bed()
 end
 
 -- set the home of a villager
-function working_villages.set_home(inv_name,marker_pos)
-	working_villages.homes[inv_name] = table.copy(working_villages.home)
-	working_villages.homes[inv_name].marker = marker_pos
+function smart_villages.set_home(inv_name,marker_pos)
+	smart_villages.homes[inv_name] = table.copy(smart_villages.home)
+	smart_villages.homes[inv_name].marker = marker_pos
 end

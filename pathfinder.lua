@@ -1,4 +1,4 @@
-working_villages.pathfinder = {}
+smart_villages.pathfinder = {}
 
 --[[
 minetest.get_content_id(name)
@@ -96,7 +96,7 @@ local function get_neighbor_ground_level(pos, jump_height, fall_height)
 	end
 end
 
-function working_villages.pathfinder.find_path(pos, endpos, entity)
+function smart_villages.pathfinder.find_path(pos, endpos, entity)
 	--print("searching for a path to:" .. minetest.pos_to_string(endpos))
 	local start_index = minetest.hash_node_position(pos)
 	local target_index = minetest.hash_node_position(endpos)
@@ -280,18 +280,18 @@ function working_villages.pathfinder.find_path(pos, endpos, entity)
 	return {endpos}
 end
 
-working_villages.pathfinder.walkable = walkable
+smart_villages.pathfinder.walkable = walkable
 local function get_ground_level(pos)
 	return get_neighbor_ground_level(pos, 30927, 30927)
 end
 
-working_villages.pathfinder.get_ground_level = get_ground_level
+smart_villages.pathfinder.get_ground_level = get_ground_level
 
-function working_villages.pathfinder.get_reachable(pos, endpos, entity)
-	local path = working_villages.pathfinder.find_path(pos, endpos, entity)
+function smart_villages.pathfinder.get_reachable(pos, endpos, entity)
+	local path = smart_villages.pathfinder.find_path(pos, endpos, entity)
 	if path == nil then
 		local corr_dest = get_ground_level({x=endpos.x,y=endpos.y-1,z=endpos.z})
-		path = working_villages.pathfinder.find_path(pos, corr_dest, entity)
+		path = smart_villages.pathfinder.find_path(pos, corr_dest, entity)
 	end
 	return path
 end

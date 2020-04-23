@@ -4,7 +4,7 @@ for specific documentation look for the comments in the (api.lua)
 To register a new job you use:
 ```
 
-working_villages.register_job("[itemstring for the job item]", {
+smart_villages.register_job("[itemstring for the job item]", {
 	description      = "[description for the job item]",
 	inventory_image  = "[texture for the job item]",
 	jobfunc = "[coroutine that is called every step]",

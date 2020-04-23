@@ -5,34 +5,34 @@ else
   print("[MOD] "..minetest.get_current_modname()..": loading")
 end
 
-working_villages={
-	modpath=minetest.get_modpath("working_villages"),
+smart_villages={
+	modpath=minetest.get_modpath("smart_villages"),
 	debug_logging=true,
 	func = {}
 }
 
 --helpers
-dofile(working_villages.modpath.."/pathfinder.lua")
-dofile(working_villages.modpath.."/forms.lua")
-dofile(working_villages.modpath.."/homes.lua")
+dofile(smart_villages.modpath.."/pathfinder.lua")
+dofile(smart_villages.modpath.."/forms.lua")
+dofile(smart_villages.modpath.."/homes.lua")
 
 --base
-dofile(working_villages.modpath.."/api.lua")
-dofile(working_villages.modpath.."/register.lua")
-dofile(working_villages.modpath.."/commanding_sceptre.lua")
+dofile(smart_villages.modpath.."/api.lua")
+dofile(smart_villages.modpath.."/register.lua")
+dofile(smart_villages.modpath.."/commanding_sceptre.lua")
 
-dofile(working_villages.modpath.."/deprecated.lua")
+dofile(smart_villages.modpath.."/deprecated.lua")
 
 --jobs
-dofile(working_villages.modpath.."/jobs/util.lua")
-dofile(working_villages.modpath.."/jobs/empty.lua")
+dofile(smart_villages.modpath.."/jobs/util.lua")
+dofile(smart_villages.modpath.."/jobs/empty.lua")
 
-dofile(working_villages.modpath.."/jobs/follow_player.lua")
-dofile(working_villages.modpath.."/jobs/plant_collector.lua")
-dofile(working_villages.modpath.."/jobs/woodcutter.lua")
+dofile(smart_villages.modpath.."/jobs/follow_player.lua")
+dofile(smart_villages.modpath.."/jobs/plant_collector.lua")
+dofile(smart_villages.modpath.."/jobs/woodcutter.lua")
 --testing jobs
-dofile(working_villages.modpath.."/jobs/torcher.lua")
-dofile(working_villages.modpath.."/jobs/snowclearer.lua")
+dofile(smart_villages.modpath.."/jobs/torcher.lua")
+dofile(smart_villages.modpath.."/jobs/snowclearer.lua")
 
 --ready
 local time_to_load= os.clock() - init

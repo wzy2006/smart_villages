@@ -3,6 +3,9 @@ local function find_tree(p)
 	if minetest.get_item_group(adj_node.name, "tree") > 0 then
 		return true
 	end
+	if smart_villages.hasbasic_materials and minetest.get_item_group(adj_node.name, "leaves") > 0 then
+		return true
+	end
 	return false
 end
 
@@ -36,8 +39,8 @@ end
 
 local searching_range = {x = 10, y = 10, z = 10, h = 5}
 
-working_villages.register_job("working_villages:job_woodcutter", {
-	description      = "working_villages job : woodcutter",
+smart_villages.register_job("smart_villages:job_woodcutter", {
+	description      = "smart_villages job : woodcutter",
 	inventory_image  = "default_paper.png^memorandum_letters.png",
 	jobfunc = function(self)
 		if is_night() then
@@ -59,12 +62,12 @@ working_villages.register_job("working_villages:job_woodcutter", {
 				end
 				local wield_stack = self:get_wield_item_stack()
 				if is_sapling(wield_stack:get_name()) or self:has_item_in_main(is_sapling) then
-					local target = working_villages.func.search_surrounding(self.object:getpos(), is_sapling_spot, searching_range)
+					local target = smart_villages.func.search_surrounding(self.object:getpos(), is_sapling_spot, searching_range)
 					self:place(is_sapling, target)
 				end
-				local target = working_villages.func.search_surrounding(self.object:getpos(), find_tree, searching_range)
+				local target = smart_villages.func.search_surrounding(self.object:getpos(), find_tree, searching_range)
 				if target ~= nil then
-					local destination = working_villages.func.find_adjacent_clear(target)
+					local destination = smart_villages.func.find_adjacent_clear(target)
 					if destination==false then
 						print("failure: no adjacent walkable found")
 						destination = target
@@ -77,4 +80,8 @@ working_villages.register_job("working_villages:job_woodcutter", {
 			end
 		end
 	end,
+},{
+	{"default:book", "default:book", "default:book"},
+	{"dye:black", "default:stick", "dye:black"},
+	{"", "dye:black", ""}
 })

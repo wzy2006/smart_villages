@@ -1,6 +1,6 @@
-working_villages.forms = {}
+smart_villages.forms = {}
 
-function working_villages.forms.show_inv_formspec(self, playername)
+function smart_villages.forms.show_inv_formspec(self, playername)
 	local home_pos = {x = 0, y = 0, z = 0}
 	if self:has_home() then
 		home_pos = self:get_home():get_marker()
@@ -22,7 +22,7 @@ function working_villages.forms.show_inv_formspec(self, playername)
 	minetest.show_formspec(playername,"villager:gui_inv_"..self.inventory_name, formstring)
 end
 
-function working_villages.forms.show_talking_formspec(self, playername)
+function smart_villages.forms.show_talking_formspec(self, playername)
 	local jobname = self:get_job()
 	if jobname then
 		jobname = jobname.description
@@ -64,12 +64,12 @@ minetest.register_on_player_receive_fields(
 					"do not exist in our coordinate system. Correct coordinates range from -30912 to 30927 in all axes.")
 				return
 			end
-			if minetest.get_node(coords).name ~= "working_villages:home_marker" then
+			if minetest.get_node(coords).name ~= "smart_villages:home_marker" then
 				minetest.chat_send_player(sender_name, 'No home marker could be found at the entered position.')
 				return
 			end
 
-			working_villages.set_home(inv_name,coords)
+			smart_villages.set_home(inv_name,coords)
 			minetest.chat_send_player(sender_name, 'Home set!')
 
 			if not minetest.get_meta(coords):get_string("bed") then

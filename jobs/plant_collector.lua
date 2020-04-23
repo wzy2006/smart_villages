@@ -1,7 +1,6 @@
-working_villages.herbs={
+smart_villages.herbs={
 	groups = {
 		"flora",
-		"leaves"
 	},
 	names = {
 		"default:apple",
@@ -13,18 +12,18 @@ working_villages.herbs={
 	}
 }
 
-function working_villages.func.is_herb(node)
+function smart_villages.func.is_herb(node)
 	local nname=node
 	if type(nname)=="table" then
 		nname=nname.name
 	end
-	for _, i in ipairs(working_villages.herbs.groups) do
+	for _, i in ipairs(smart_villages.herbs.groups) do
 		if minetest.get_item_group(nname, i) > 0 then
 			--print("found some "..i)
 			return true
 		end
 	end
-	for _, i in ipairs(working_villages.herbs.names) do
+	for _, i in ipairs(smart_villages.herbs.names) do
 		if nname==i then
 			--print("found a "..nname)
 			return true
@@ -34,7 +33,7 @@ function working_villages.func.is_herb(node)
 end
 
 local function find_herb(p)
-	return working_villages.func.is_herb(minetest.get_node(p).name)
+	return smart_villages.func.is_herb(minetest.get_node(p).name)
 end
 
 local function is_night()
@@ -43,8 +42,8 @@ end
 
 local searching_range = {x = 10, y = 3, z = 10}
 
-working_villages.register_job("working_villages:job_herbcollector", {
-	description      = "working_villages job : herb collector",
+smart_villages.register_job("smart_villages:job_herbcollector", {
+	description      = "smart_villages job : herb collector",
 	inventory_image  = "default_paper.png^memorandum_letters.png",
 	jobfunc = function(self)
 		if is_night() then
@@ -54,7 +53,7 @@ working_villages.register_job("working_villages:job_herbcollector", {
 			self:count_timer("herbcollector:change_dir")
 			self:handle_obstacles()
 			if self:timer_exceeded("herbcollector:search",20) then
-				local sapling = self:get_nearest_item_by_condition(working_villages.func.is_herb, searching_range)
+				local sapling = self:get_nearest_item_by_condition(smart_villages.func.is_herb, searching_range)
 				if sapling ~= nil then
 					local pos = sapling:getpos()
 					--print("found a sapling at:".. minetest.pos_to_string(pos))
@@ -64,9 +63,9 @@ working_villages.register_job("working_villages:job_herbcollector", {
 						self:pickup_item()
 					end
 				end
-				local target = working_villages.func.search_surrounding(self.object:getpos(), find_herb, searching_range)
+				local target = smart_villages.func.search_surrounding(self.object:getpos(), find_herb, searching_range)
 				if target ~= nil then
-					local destination = working_villages.func.find_adjacent_clear(target)
+					local destination = smart_villages.func.find_adjacent_clear(target)
 					if destination==false then
 						print("failure: no adjacent walkable found")
 						destination = target

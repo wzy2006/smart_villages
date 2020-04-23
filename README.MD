@@ -1,8 +1,8 @@
-# minetest mod working_villages [![Build Status](https://travis-ci.org/theFox6/working_villages.svg?branch=master)](https://travis-ci.org/theFox6/working_villages)
+# minetest mod smart_villages [![Build Status](https://travis-ci.org/theFox6/smart_villages.svg?branch=master)](https://travis-ci.org/theFox6/smart_villages)
 This mod adds Villagers performing work.
 The plan is to make villagers build up their own villages.
 
-[working_villages forum page](https://forum.minetest.net/viewtopic.php?f=9&t=17429)
+[smart_villages forum page](https://forum.minetest.net/viewtopic.php?f=9&t=17429)
 
 Planned Features:
 * Villagers
