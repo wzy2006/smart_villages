@@ -2,16 +2,13 @@ working_villages.register_villager("working_villages:villager_male", {
 	hp_max     = 30,
 	weight     = 20,
 	mesh       = "character.b3d",
-	textures   = {"villager_male.png"},
+	textures   = {working_villages.random_texture("villager_male.png")},
 	egg_image  = "villager_male_egg.png",
 })
-local product_name = "working_villages:villager_female"
-local texture_name = "villager_female.png"
-local egg_img_name = "villager_female_egg.png"
-working_villages.register_villager(product_name, {
+working_villages.register_villager("working_villages:villager_female", {
 	hp_max     = 20,
 	weight     = 20,
 	mesh       = "character.b3d",
-	textures   = {texture_name},
-	egg_image  = egg_img_name,
+	textures   = {working_villages.random_texture("villager_female.png","character_castaway_female.png","character_farmer_female.png","character_princess.png", "character_rogue_female.png")},
+	egg_image  = "villager_female_egg.png",
 })

@@ -851,3 +851,9 @@ function working_villages.register_villager(product_name, def)
 		product_name    = product_name,
 	})
 end
+function working_villages.random_texture(...)
+	math.randomseed(os.time())
+	local args = { ... }
+	return args[math.random(1, #args)]
+	-- body
+end

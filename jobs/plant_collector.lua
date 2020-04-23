@@ -1,6 +1,7 @@
 working_villages.herbs={
 	groups = {
 		"flora",
+		"leaves"
 	},
 	names = {
 		"default:apple",
